@@ -4,10 +4,25 @@ function buildMetadata(sample) {
 
   // Use `d3.json` to fetch the metadata for a sample
     // Use d3 to select the panel with id of `#sample-metadata`
+    var url = "/metadata/" + sample;
+    d3.json(url).then(function(response) {
+  
+      console.log(response);
+      let meta = d3.select("#sample-metadata")
+      meta.html("")
+      Object.entries(response).forEach(([key, value]) => {
+        // Log the key and value
+        console.log(`Key: ${key} and Value ${value}`);
+        meta.append("p").text(`${key} : ${value}`)
+      });
 
+    });
+  
+  
     // Use `.html("") to clear any existing metadata
 
     // Use `Object.entries` to add each key and value pair to the panel
+    
     // Hint: Inside the loop, you will need to use d3 to append new
     // tags for each key-value in the metadata.
 
@@ -18,10 +33,55 @@ function buildMetadata(sample) {
 function buildCharts(sample) {
 
   // @TODO: Use `d3.json` to fetch the sample data for the plots
+  var url = "/samples/" + sample;
+    
+    d3.json(url).then(function(response) {
+      var otu_ids = response.otu_ids;
+      var sample_values = response.sample_values;
+      var otu_labels = response.otu_labels;
+      console.log(response);
 
-    // @TODO: Build a Bubble Chart using the sample data
-
+  // @TODO: Build a Bubble Chart using the sample data
+  var trace1 = {
+    x: otu_ids,
+    y: sample_values,
+    hovertext: otu_labels,
+    mode: 'markers',
+    marker: {
+      size: sample_values,
+      color: otu_ids
+    }
+    
+  };
+  
+  var data1 = [trace1];
+  
+  var layout = {
+    showlegend: false,
+    height: 600
+    //width: 1200
+  };
+  
+  Plotly.newPlot('bubble', data1, layout);
+  
     // @TODO: Build a Pie Chart
+    var data = [{
+      values: sample_values.slice(0,10),
+      labels: otu_ids.slice(0,10),
+      hovertext: otu_labels.slice(0,10),
+      hoverinfo: "hovertext",
+      type: 'pie'
+    }];
+    
+    var layout = {
+      height: 400,
+      width: 500
+    };
+    
+    Plotly.newPlot('pie', data, layout);
+
+  });
+
     // HINT: You will need to use slice() to grab the top 10 sample_values,
     // otu_ids, and labels (10 each).
 }
