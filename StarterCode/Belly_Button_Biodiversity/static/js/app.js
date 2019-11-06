@@ -58,12 +58,13 @@ function buildCharts(sample) {
   
   var layout = {
     showlegend: false,
-    height: 600
+    xaxis = data1,
+    //height: 600
     //width: 1200
   };
   
   Plotly.newPlot('bubble', data1, layout);
-  
+
     // @TODO: Build a Pie Chart
     var data = [{
       values: sample_values.slice(0,10),
