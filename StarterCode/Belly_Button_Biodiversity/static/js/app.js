@@ -58,7 +58,7 @@ function buildCharts(sample) {
   
   var layout = {
     showlegend: false,
-    xaxis = data1,
+    xaxis: data1
     //height: 600
     //width: 1200
   };
